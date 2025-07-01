@@ -9,50 +9,69 @@ const posts = require("../data/posts");
 /* definiamo tutte le rotte */
 
 /* index (read) */
-// res.send("Lista delle pizze");
+// res.send("Lista dei post");
 router.get("/", (req, res) => {
   res.json(posts);
 });
 
 /* show (read) */
-// res.send("Dettagli della pizza " + req.params.id);
+// res.send("Dettagli dei post " + req.params.id);
 router.get("/:id", (req, res) => {
-  // const post = posts.find((post) => {
-  // return post.id == req.params.id;
-  // });
-  // res.json(post);
+  // estrae l'ID dalla URL e lo converte da stringa a numero
   const id = parseInt(req.params.id);
-  const post = posts.find((post) => {
-    return post.id === id;
-  });
+  // cerca il post nell'array che ha un ID uguale a quello passato
+  const post = posts.find((post) => post.id === id);
+  // se il post non viene trovato, restituisce un errore 404 (Not Found)
+  if (!post) {
+    return res.status(404).json({
+      status: 404,
+      message: "Post non trovato!!",
+    });
+  }
+  // se trovato, restituisce il post come oggetto JSON
   res.json(post);
 });
 
 /* store */
-// res.send("Creazione nuova pizza");
+// res.send("Creazione nuovo post");
 router.post("/", (req, res) => {
   res.send("Creazione nuovo post");
 });
 
 /* update */
-// res.send("Modifica integrale della pizza " + req.params.id);
+// res.send("Modifica integrale del post " + req.params.id);
 router.put("/:id", (req, res) => {
   const id = req.params.id;
   res.send(`Modifica integrale del post: ${id}`);
 });
 
 /* modify */
-// res.send("Modifica parziale della pizza " + req.params.id);
+// res.send("Modifica parziale del post " + req.params.id);
 router.patch("/:id", (req, res) => {
   const id = req.params.id;
   res.send(`Modifica parziale del post: ${id}`);
 });
 
 /* destroy */
-// res.send("Eliminazione della pizza " + req.params.id);
+// res.send("Cancellazione del post " + req.params.id);
 router.delete("/:id", (req, res) => {
-  const id = req.params.id;
-  res.send(`Cancellazione del post: ${id}`);
+  // estrae l'ID dalla URL e lo converte da stringa a numero
+  const id = parseInt(req.params.id);
+  // cerca il post nell'array che ha un ID uguale a quello passato
+  const post = posts.find((post) => post.id === id);
+  // se il post non viene trovato, restituisce un errore 404 (Not Found)
+  if (!post) {
+    return res.status(404).json({
+      status: 404,
+      message: "Post non trovato!!",
+    });
+  }
+  // rimuovo il post trovato dall'array "posts"
+  posts.splice(posts.indexOf(post), 1);
+  // risponde con uno status 204 (No Content) per indicare che l'eliminazione è avvenuta con successo
+  res.sendStatus(204);
+  // log per verificare la nuova array senza il post cancellato
+  console.log(posts);
 });
 
 // esportiamo router
