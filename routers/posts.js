@@ -6,86 +6,34 @@ const port = 3010;
 // importiamo l'array posts
 const posts = require("../data/posts");
 
-/* definiamo tutte le rotte */
+// importiamo le funzioni del controller
+const postsControllers = require("../controllers/postsControllers");
 
-/* index (read)
-// res.send("Lista dei post");
-router.get("/", (req, res) => {
-  res.json(posts);
-}); */
+/* rotte CRUD */
 
 /* index (read) */
-// ottenere tutti i post, con possibilità di filtro tramite query string
-router.get("/", (req, res) => {
-  let filtered_posts = posts;
-  // se nella query string è presente il parametro 'tags'
-  if (req.query.tags) {
-    // filtriamo i post, tenendo solo quelli che includono il tag richiesto
-    filtered_posts = posts.filter((post) => post.tags.includes(req.query.tags));
-  }
-  // invia i post filtrati (o tutti se non è stato specificato alcun tag)
-  res.json(filtered_posts);
-});
+// router per ottenere tutti i post, con possibilità di filtro tramite query string
+router.get("/", postsControllers.index);
 
 /* show (read) */
-// res.send("Dettagli dei post " + req.params.id);
-router.get("/:id", (req, res) => {
-  // estrae l'ID dalla URL e lo converte da stringa a numero
-  const id = parseInt(req.params.id);
-  // cerca il post nell'array che ha un ID uguale a quello passato
-  const post = posts.find((post) => post.id === id);
-  // se il post non viene trovato, restituisce un errore 404 (Not Found)
-  if (!post) {
-    return res.status(404).json({
-      status: 404,
-      message: "Post non trovato!!",
-    });
-  }
-  // se trovato, restituisce il post come oggetto JSON
-  res.json(post);
-});
+// route per ottenere un post specifico tramite ID
+router.get("/:id", postsControllers.show);
 
 /* store */
-// res.send("Creazione nuovo post");
-router.post("/", (req, res) => {
-  res.send("Creazione nuovo post");
-});
+// route per creare un nuovo post
+router.post("/", postsControllers.store);
 
 /* update */
-// res.send("Modifica integrale del post " + req.params.id);
-router.put("/:id", (req, res) => {
-  const id = req.params.id;
-  res.send(`Modifica integrale del post: ${id}`);
-});
+// route per modificare un post esistente in modo integrale
+router.put("/:id", postsControllers.update);
 
 /* modify */
-// res.send("Modifica parziale del post " + req.params.id);
-router.patch("/:id", (req, res) => {
-  const id = req.params.id;
-  res.send(`Modifica parziale del post: ${id}`);
-});
+// route per modificare un post esistente in modo parziale
+router.patch("/:id", postsControllers.modify);
 
 /* destroy */
-// res.send("Cancellazione del post " + req.params.id);
-router.delete("/:id", (req, res) => {
-  // estrae l'ID dalla URL e lo converte da stringa a numero
-  const id = parseInt(req.params.id);
-  // cerca il post nell'array che ha un ID uguale a quello passato
-  const post = posts.find((post) => post.id === id);
-  // se il post non viene trovato, restituisce un errore 404 (Not Found)
-  if (!post) {
-    return res.status(404).json({
-      status: 404,
-      message: "Post non trovato!!",
-    });
-  }
-  // rimuovo il post trovato dall'array "posts"
-  posts.splice(posts.indexOf(post), 1);
-  // risponde con uno status 204 (No Content) per indicare che l'eliminazione è avvenuta con successo
-  res.sendStatus(204);
-  // log per verificare la nuova array senza il post cancellato
-  console.log(posts);
-});
+// route per cancellare un post esistente
+router.delete("/:id", postsControllers.destroy);
 
 // esportiamo router
 module.exports = router;
