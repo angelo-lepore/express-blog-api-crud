@@ -8,10 +8,23 @@ const posts = require("../data/posts");
 
 /* definiamo tutte le rotte */
 
-/* index (read) */
+/* index (read)
 // res.send("Lista dei post");
 router.get("/", (req, res) => {
   res.json(posts);
+}); */
+
+/* index (read) */
+// ottenere tutti i post, con possibilità di filtro tramite query string
+router.get("/", (req, res) => {
+  let filtered_posts = posts;
+  // se nella query string è presente il parametro 'tags'
+  if (req.query.tags) {
+    // filtriamo i post, tenendo solo quelli che includono il tag richiesto
+    filtered_posts = posts.filter((post) => post.tags.includes(req.query.tags));
+  }
+  // invia i post filtrati (o tutti se non è stato specificato alcun tag)
+  res.json(filtered_posts);
 });
 
 /* show (read) */
