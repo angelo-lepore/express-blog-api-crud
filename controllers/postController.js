@@ -12,6 +12,14 @@ function index(req, res) {
     // filtriamo i post, tenendo solo quelli che includono il tag richiesto
     filtered_posts = posts.filter((post) => post.tags.includes(req.query.tags));
   }
+  // se non sono stati trovati post con il tag specificato, restituisce un errore 404 (Not Found)
+  if (filtered_posts.length === 0) {
+    return res.status(404).json({
+      status: 404,
+      // e un messaggio di errore
+      message: "Nessun post trovato con il tag specificato.",
+    });
+  }
   // invia i post filtrati (o tutti se non è stato specificato alcun tag)
   res.json(filtered_posts);
 }
