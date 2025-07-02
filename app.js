@@ -4,7 +4,7 @@ const app = express();
 const port = 3010;
 
 // importiamo router
-const posts_router = require("./routers/posts");
+const posts_router = require("./routers/post");
 
 // mettiamo il server in ascolto
 app.listen(port, () => {
@@ -15,6 +15,9 @@ app.listen(port, () => {
 app.get("/", (req, res) => {
   res.send("Server del mio blog");
 });
+
+// registro il body-parser
+app.use(express.json());
 
 // configuriamo gli asset statici
 app.use(express.static("public"));

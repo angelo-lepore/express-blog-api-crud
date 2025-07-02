@@ -35,19 +35,69 @@ function show(req, res) {
 
 /* store */
 function store(req, res) {
-  res.send("Creazione nuovo post");
+  // creiamo un nuovo ID incrementando l'ultimo ID presente nell'array posts
+  const newId = posts[posts.length - 1].id + 1;
+  // creiamo un nuovo oggetto post
+  const newPost = {
+    id: newId,
+    title: req.body.title,
+    content: req.body.content,
+    image: req.body.image,
+    tags: req.body.tags,
+  };
+  // aggiungiamo il nuovo post all'array posts
+  posts.push(newPost);
+  // controllo per verificare che il nuovo post sia stato aggiunto correttamente
+  console.log(posts);
+  // restituiamo lo status corretto e il nuovo post come oggetto JSON
+  res.status(201);
+  res.json(newPost);
 }
 
 /* update */
 function update(req, res) {
-  const id = req.params.id;
-  res.send(`Modifica integrale del post: ${id}`);
+  // estrae l'ID dalla URL e lo converte da stringa a numero
+  const id = parseInt(req.params.id);
+  // cerca il post nell'array che ha un ID uguale a quello passato
+  const post = posts.find((post) => post.id === id);
+  // se il post non viene trovato, restituisce un errore 404 (Not Found)
+  if (!post) {
+    return res.status(404).json({
+      status: 404,
+      message: "Post non trovato!!",
+    });
+  }
+  // aggiorna il post con i nuovi dati ricevuti dal body della richiesta
+  post.title = req.body.title;
+  post.content = req.body.content;
+  post.image = req.body.image;
+  post.tags = req.body.tags;
+  // controllo per verificare che il post sia stato aggiornato correttamente
+  console.log(posts);
+  // restituisce il post aggiornato
+  res.json(post);
 }
 
 /* modify */
 function modify(req, res) {
-  const id = req.params.id;
-  res.send(`Modifica parziale del post: ${id}`);
+  // estrae l'ID dalla URL e lo converte da stringa a numero
+  const id = parseInt(req.params.id);
+  // cerca il post nell'array che ha un ID uguale a quello passato
+  const post = posts.find((post) => post.id === id);
+  // se il post non viene trovato, restituisce un errore 404 (Not Found)
+  if (!post) {
+    return res.status(404).json({
+      status: 404,
+      message: "Post non trovato!!",
+    });
+  }
+  // aggiorna il post con i nuovi dati ricevuti dal body della richiesta
+  post.title = req.body.title;
+  post.tags = req.body.tags;
+  // controllo per verificare che il post sia stato aggiornato correttamente
+  console.log(posts);
+  // restituisce il post aggiornato
+  res.json(post);
 }
 
 /* destroy */
