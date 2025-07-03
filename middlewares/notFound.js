@@ -1,4 +1,4 @@
-// creiamo una middleware che risponda con un messaggio di errore (404)
+// creiamo una middleware per gestire le richieste a rotte non esistenti (errore 404)
 function notFound(req, res, next) {
   res.status(404);
   res.json({
@@ -7,5 +7,5 @@ function notFound(req, res, next) {
   });
 }
 
-// // esportiamo la middleware
+// esportiamo la middleware
 module.exports = notFound;

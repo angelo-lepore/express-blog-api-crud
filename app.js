@@ -3,10 +3,10 @@ const express = require("express");
 const app = express();
 const port = 3010;
 
-// middleware per rotte non trovate
+// middleware per gestire le richieste a rotte non esistenti (errore 404)
 const notFound = require("./middlewares/notFound");
 
-// middleware per
+// middleware per la gestione centralizzata degli errori
 const handleError = require("./middlewares/handleError");
 
 // importiamo router
