@@ -3,6 +3,12 @@ const express = require("express");
 const app = express();
 const port = 3010;
 
+// middleware per rotte non trovate
+const notFound = require("./middlewares/notFound");
+
+// middleware per
+const handleError = require("./middlewares/handleError");
+
 // importiamo router
 const posts_router = require("./routers/post");
 
@@ -24,3 +30,7 @@ app.use(express.static("public"));
 
 // indichiamo con use che esistono nuove rotte
 app.use("/posts", posts_router);
+
+// registro le middleware
+app.use(notFound);
+app.use(handleError);
